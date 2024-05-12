@@ -7,13 +7,14 @@ def leaky_relu(x: Tensor) -> Tensor:
     fill 'data' and 'req_grad' and implement LeakyRelu grad_fn
     hint: use np.where like Relu method but for LeakyRelu
     """
+    leaky_slope = 0.01
 
-    data = ...
-    req_grad = ...
+    data = np.where(x.data < 0, x.data*leaky_slope, x.data)
+    req_grad = x.requires_grad
 
     if req_grad:
         def grad_fn(grad: np.ndarray):
-            return ...
+            return np.where(x.data < 0, grad*leaky_slope, grad)
 
         depends_on = [Dependency(x, grad_fn)]
     else:

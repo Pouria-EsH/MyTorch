@@ -166,8 +166,8 @@ def _tensor_sum(t: Tensor) -> Tensor:
 
 def _tensor_log(t: Tensor) -> Tensor:
     "TODO: tensor log"
-    data = ...
-    req_grad = ...
+    data = np.log(t.data)
+    req_grad = t.requires_grad
 
     if req_grad:
         def grad_fn(grad: np.ndarray):
@@ -182,12 +182,12 @@ def _tensor_log(t: Tensor) -> Tensor:
 
 def _tensor_exp(t: Tensor) -> Tensor:
     "TODO: tensor exp"
-    data = ...
-    req_grad = ...
+    data = np.exp(t.data)
+    req_grad = t.requires_grad
 
     if req_grad:
         def grad_fn(grad: np.ndarray):
-            return ...
+            return grad * data
 
         depends_on = [Dependency(t, grad_fn)]
 
@@ -198,12 +198,19 @@ def _tensor_exp(t: Tensor) -> Tensor:
 
 def _tensor_pow(t: Tensor, power: float) -> Tensor:
     "TODO: tensor power"
-    data = ...
-    req_grad = ...
+    if power < 0:
+        data = np.power(np.reciprocal(t.data), -power)
+    else:
+        data = np.power(t.data, power)
+
+    req_grad = t.requires_grad
 
     if req_grad:
         def grad_fn(grad: np.ndarray):
-            return None
+            if power < 0:
+                return grad * power * np.power(t.data, -power + 1)
+            else:
+                return grad * power * np.power(t.data, power - 1)
 
         depends_on = [Dependency(t, grad_fn)]
 
@@ -214,8 +221,8 @@ def _tensor_pow(t: Tensor, power: float) -> Tensor:
 
 def _tensor_slice(t: Tensor, idcs) -> Tensor:
     "TODO: tensor slice"
-    data = ...
-    requires_grad = ...
+    data = t.data[idcs]
+    requires_grad = t.requires_grad
 
     if requires_grad:
         def grad_fn(grad: np.ndarray) -> np.ndarray:
@@ -231,8 +238,8 @@ def _tensor_slice(t: Tensor, idcs) -> Tensor:
 
 def _tensor_neg(t: Tensor) -> Tensor:
     "TODO: tensor negative"
-    data = ...
-    requires_grad = ...
+    data = t.data * -1
+    requires_grad = t.requires_grad
     if requires_grad:
         depends_on = [Dependency(t, lambda x: -x)]
     else:
@@ -279,7 +286,7 @@ def _add(t1: Tensor, t2: Tensor) -> Tensor:
 def _sub(t1: Tensor, t2: Tensor) -> Tensor:
     "TODO: implement sub"
     # Hint: a-b = a+(-b)
-    return None
+    return _add(t1,_tensor_neg(t2))
 
 def _mul(t1: Tensor, t2: Tensor) -> Tensor:
     # Done ( Don't change )

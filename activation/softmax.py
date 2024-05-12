@@ -11,4 +11,6 @@ def softmax(x: Tensor) -> Tensor:
         2. using matrix mul to do it :) (recommended)
     hint: a/b = a*(b^-1)
     """
-    pass
+    exp_vals = x.exp()
+    exp_sum = exp_vals @ np.ones((x.shape[-1],1))
+    return exp_vals * ((exp_sum)**-1)
