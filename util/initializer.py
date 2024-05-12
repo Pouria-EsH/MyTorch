@@ -2,7 +2,7 @@ import numpy as np
 
 def xavier_initializer(shape):
     "TODO: implement xavier_initializer" 
-    return ...
+    return np.random.randn(*shape) * np.sqrt(1/shape[0], dtype=np.float64)
 
 def he_initializer(shape):
     "TODO: implement he_initializer" 
@@ -14,7 +14,7 @@ def random_normal_initializer(shape, mean=0.0, stddev=0.05):
 
 def zero_initializer(shape):
     "TODO: implement zero_initializer" 
-    return ...
+    return np.zeros(shape=shape, dtype=np.float64)
 
 def one_initializer(shape):
     return np.ones(shape, dtype=np.float64)
