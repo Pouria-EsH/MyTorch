@@ -1,8 +1,9 @@
 import numpy as np
 
 def xavier_initializer(shape):
-    "TODO: implement xavier_initializer" 
-    return np.random.randn(*shape) * np.sqrt(1/shape[0], dtype=np.float64)
+    "TODO: implement xavier_initializer"
+    limit = np.sqrt(6.0 / np.sum(shape))
+    return np.random.uniform(-limit, limit, size=shape)
 
 def he_initializer(shape):
     "TODO: implement he_initializer" 
