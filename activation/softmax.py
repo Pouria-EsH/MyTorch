@@ -12,5 +12,5 @@ def softmax(x: Tensor) -> Tensor:
     hint: a/b = a*(b^-1)
     """
     exp_vals = x.exp()
-    exp_sum = exp_vals @ np.ones((x.shape[-1],1))
-    return exp_vals * ((exp_sum)**-1)
+    exp_sum = exp_vals @ np.ones((x.shape[-1],1), dtype=np.float64)
+    return exp_vals * (exp_sum**-1)

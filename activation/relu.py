@@ -5,7 +5,7 @@ def relu(x: Tensor) -> Tensor:
     "TODO: implement relu function"
 
     # use np.maximum
-    data = np.where(x.data < 0, np.zeros_like(x.data), x.data)
+    data = np.maximum(0, x.data)
     req_grad = x.requires_grad
 
     if req_grad:
